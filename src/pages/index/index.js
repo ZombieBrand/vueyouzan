@@ -31,8 +31,8 @@ const app = new Vue({
       }).then(res => {
         let curLists = res.data.lists
         // 判断是否全部数据都已请求完
-        console.log(res)
-        if (curLists < this.pageSize) {
+        console.log(this.lists)
+        if (curLists.length < this.pageSize) {
           this.allLoaded = true
         }
         if (this.lists) {
