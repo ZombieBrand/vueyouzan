@@ -1,21 +1,24 @@
-import 'css/common.css';
-import './index.css';
-import Vue from 'vue';
-import axios from 'axios';
-import url from 'js/api.js';
-import Mint from 'mint-ui';
+import 'css/common.css'
+import './index.css'
+
+import Vue from 'vue'
+import axios from 'axios'
+import url from 'js/api.js'
 import Foot from 'components/Foot.vue'
 import Swipe from 'components/Swipe.vue'
-Vue.use(Mint);
-const app = new Vue({
-  el: '#app',
+
+import { InfiniteScroll } from 'mint-ui'
+Vue.use(InfiniteScroll)
+
+new Vue({
+  el: '.vue-el',
   data: {
-    lists: null,
     pageNum: 1,
     pageSize: 6,
+    lists: null,
     loading: false,
     allLoaded: false,
-    bannerLists:null,
+    bannerLists: null
   },
   created() {
     this.getLists()
@@ -27,35 +30,27 @@ const app = new Vue({
       this.loading = true
       axios.get(url.hotLists, {
         pageNum: this.pageNum,
-        pageSize: this.pageSize,
+        pageSize: this.pageSize
       }).then(res => {
         let curLists = res.data.lists
-        // 判断是否全部数据都已请求完
-        console.log(this.lists)
-        if (curLists.length < this.pageSize) {
+        if(curLists.length < this.pageSize) {
           this.allLoaded = true
         }
         if (this.lists) {
-          this.lists = [...this.lists, ...curLists]
+          this.lists = this.lists.concat(curLists)
         } else {
-          //第一次请求数据
           this.lists = curLists
         }
-        this.pageNum++
-          this.loading = false
+        this.loading = false
       })
     },
-    getBanner(){
-      axios.get(url.banner).then(res =>{
+    getBanner() {
+      axios.get(url.banner).then(res => {
         this.bannerLists = res.data.lists
       })
     }
   },
-  components:{
-    /* 
-      es6语法
-      相当于Foot:Foot
-     */
+  components: {
     Foot,
     Swipe
   }
