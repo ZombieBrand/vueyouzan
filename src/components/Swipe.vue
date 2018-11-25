@@ -1,9 +1,9 @@
 <template>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div class="swp-page swiper-slide" v-for="list in lists">
+      <div class="swp-page swiper-slide" v-for="list in lists" v-bind:key="list.clickUrl">
         <a class="js-no-follow" :href="list.clickUrl">
-          <img class="goods-main-photo fadeIn" :src="list.image">
+          <img class="goods-main-photo fadeIn" :src="list.img">
         </a>
       </div>
     </div>
@@ -57,4 +57,8 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+
+
+
 </style>

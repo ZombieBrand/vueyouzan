@@ -1,15 +1,50 @@
 <template>
   <div class="bottom-nav">
     <ul>
-      <li class="active"><a href="index.html"><i class="icon-home"></i><div>有赞</div></a></li>
-      <li><a href="category.html"><i class="icon-category"></i><div>分类</div></a></li>
-      <li><a href="https://h5.youzan.com/v2/trade/cart?f_platform=yzapp&amp;source=yzapp"><i class="icon-cart"></i><div>购物车</div></a></li>
-      <li><a href="https://h5.youzan.com/v2/buyer/member"><i class="icon-user"></i><div>我</div></a></li>
+      <li v-on:click="changeNav(list,index)" v-bind:class="{active:index===curIndex}" v-for="(list,index) in navConfig" v-bind:key="list.icon"><a><i v-bind:class="list.icon"></i><div>{{list.name}}</div></a></li>
     </ul>
   </div> 
 </template>
 
 <script>
+import qs from 'qs'
+let {index} = qs.parse(location.search.substr(1))
+// 等同于 index = qs.parse(location.search.substr(1)).index
+let navConfig = [
+  {
+    name: "有赞",
+    icon: "icon-home",
+    href: "index.html"
+  },
+  {
+    name: "分类",
+    icon: "icon-category",
+    href: "category.html"
+  },
+  {
+    name: "购物车",
+    icon: "icon-cart",
+    href: "cart.html"
+  },
+  {
+    name: "我",
+    icon: "icon-user",
+    href: "member.html"
+  }
+];
+export default {
+  data() {
+    return {
+      navConfig,
+      curIndex: parseInt(index) || 0
+    };
+  },
+  methods:{
+    changeNav(list,index){
+      location.href = `${list.href}?index=${index}`
+    }
+  }
+};
 </script>
 
 <style>
@@ -19,7 +54,7 @@
   height: 50px;
   bottom: 0;
   background-color: #fff;
-  z-index: 8;
+  z-index: 999;
   -o-border-image: url(https://b.yzcdn.cn/v2/image/wap/border-line-2.png) 2
     stretch;
   border-image: url(https://b.yzcdn.cn/v2/image/wap/border-line-2.png) 2 stretch;
@@ -108,5 +143,22 @@
 .bottom-nav .active .icon-user {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABCCAYAAADjVADoAAAABGdBTUEAALGPC/xhBQAABLNJREFUeAHtW0toE1EUnZekrfVT1IVWqS1CiwvFLir4wUItCEI3Wp02deVOcFEUVyJCFn5WRdCFC0FQEZtEW0EFF4IFPxutohZ1UXGhbaB+UCm2zWee545BsFhyZ3JnGHEehCaZM+fce3Lnzbw7U8MIR+hA6EDoQOhA6ADXAcUFSuAShhE5appbjEhkp6FUCzhXIoCVxK0NYxx/xg2thw3LunEinX6UMAyLtvkxfDHiXVvbvLoVK3ohdhhJLWMmNgFz+j5kMmdWDw1NM/dxDfPciHxX125UwGlUwCpXUWr9HhVyKJZKXXe1P3OnCBPnBqZy8fgJIxq95toEUiUDwWFz4ZObQDj7eEWs8vH4VSTRzQmCjdE6Gevv7wEeR43s8KQi8OsdFzeB8oaxNresBzabeEXYcwIdDl6OQmGP9JwhWhF0drAnRi9NIG5MvraWoI6oEXSKtCc3wQD/SoUJ1Nb660Z3X4oZkcDvhOOMrhN8GaSVgKaUmNgckTPNrSoWuy8VGIdH5/OtFen0Aw62FEbMUfuyuZSa9Ha6VBcackb8WjsIhcWkEdSUM6K4eGKmIAWzF2wSZGJGYLIRC4qbmKSmmBHc4EVxSoldaosZUewniOZZikxrnSmF4W4XMwKC1Fjxe4hpyhlBnSW/h6CmnBFor/ntA7X0pDTFjKAeI4KakAqMwTNR1GRAS0PEjEig0Uo9xtKSMgjSIk0ZNsFFCwVEjVZ0od9LBTcnDzRsrTkBzjeIVQRJ291mNFqdh+FwD2hId7ZFjaB0qHOE8/tJh6mx4cQt3Z0icbFl+KxMwuZt0RBN3WbJyrArwaMOtpcV8btA/pUbPF4dGr+NoDfhLb8/7DCMBE7XQb0JPCvU8GPoQOjALwc8nSwnTHPhkmh0I9YFa5XW9bj504BXPd7TMxLVeF+NS/L5xR9jGp9n8Hka+M/4bkwpNYbT5pil9Rt893heMvm2iBX/I2rEvba2WOvy5TuQUAcC3wzydXgfFYta6y/gfYLXnVw2279gYECsQyViRLa7uxlE+1QkshdJc5+IKdcfFIq+p5W6/DCTubJtaChfDmFZRvzo7KyrrKzsw6/eVU4Q5e4LQ16jSdNbkUrddcvlygg6BLbW1h7GMXwMwgvcikvvB0MGpwuF/YvS6Y9OuR0b8aSlpaK5qSkJE3Y5FfMDj/nj5dTkZHvNzZufnOg5MqJYCWRCpxMRv7GojBdTMzPtNYODdPZhDUf9iNba2otBN4GyRozrq6uqbiUcdODYFYGHw3ZBYYBlb0BAlmUdqEwmz3HCYVcETlOnOIRBwkSUOpIyTdZ1DMuIXE9PO0pnTZCSZMWCR4w6o9EdHCzLCBB1cMiCiEElb+fExTNC6y0cskBitN7EiYtlBGbhBg5ZEDE4pFnPgLOMQIJLgpgkKyallnJwXCO+c8gCidH6KyculhG4UhvhkAURg8nyKSculhFoltzmkAURowqF85y4WEY8Hx09i8XMKw5hkDCo5Du4Pch6hoJlxIbh4ZyVze4G8bMgJVoilvT3b9/Y/y/CXmuQqL0Eb2w8iDWHiVNqE75aXCIYvzd/RuWOaMu6gDXGJb/FQ73QgdCB0IHQgf/FgZ+UQn2ZrGr7bgAAAABJRU5ErkJggg==");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>
 
