@@ -97,7 +97,9 @@
                     <a href="https://maijia.youzan.com/mars/rank/hotshops" class="pull-right icon-right">更多</a>
                   </div>
                   <ul>
-                    <li class="shop-item" v-for="(list,index) in rankData.hotShops" v-on:click="toSearch(list)">
+                    <li class="shop-item" v-for="(list,index) in rankData.hotShops" v-on:click="toSearch(list)"
+                    v-on:click="toSearch(list)"
+                    >
                       <div class="shop-title">
                         <span class="badge">{{index+1}}</span>
                         <a :href="list.clickUrl">{{list.name}}</a>
@@ -126,6 +128,7 @@
               <ul class="category-content">
                 <li class="category-item js-category-item" :data-item-id="list.id" :data-item-name="list.name" 
                   v-for="list in subData.brandList"
+                  v-on:click="toSearch(list)"
                 >
                   <img :src="list.img" :alt="list.name" class="category-img">
                   <span class="category-item-name">
@@ -136,6 +139,7 @@
               <ul class="category-content">
                 <li class="category-item js-category-item" :data-item-id="list.id" :data-item-name="list.name" 
                   v-for="list in subData.categoryList"
+                  v-on:click="toSearch(list)"
                 >
                   <img :src="list.img" :alt="list.name" class="category-img">
                   <span class="category-item-name">

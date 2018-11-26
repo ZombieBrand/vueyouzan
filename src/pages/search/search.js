@@ -1,10 +1,11 @@
 import 'css/common.css'
 import './search.css'
-
 import Vue from 'vue'
 import axios from 'axios'
 import url from 'js/api.js'
 import qs from 'qs'
+
+import mixin from 'js/mixin.js'
 
 let {
   keyword,
@@ -14,7 +15,9 @@ let {
 new Vue({
   el: '.container',
   data: {
-    searchList:null
+    searchList:null,
+    keyword:keyword,
+    isShow:false
   },
   created() {
     this.getSearchList()
@@ -30,6 +33,17 @@ new Vue({
       }).catch(res=>{
         console.log('getSearchlist404')
       })
+    },
+    move(){  
+      if(document.documentElement.scrollTop || document.body.scrollTop > 100){
+        this.isShow = true
+      }else{
+        this.isShow = false
+      }
+    },
+    returnTop(){
+      console.log(1)
     }
-  }
+  },
+  mixins:[mixin]
 })
