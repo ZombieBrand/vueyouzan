@@ -1,49 +1,87 @@
-import 'css/common.css'
-import './search.css'
-import Vue from 'vue'
-import axios from 'axios'
-import url from 'js/api.js'
-import qs from 'qs'
+import axios from "axios";
+import "css/common.css";
+import url from "js/api.js";
+import mixin from "js/mixin.js";
+import { InfiniteScroll } from 'mint-ui';
+import qs from "qs";
+import Vue from "vue";
+import "./search.css";
 
-import mixin from 'js/mixin.js'
+
+Vue.use(InfiniteScroll)
 
 let {
   keyword,
   id
-} = qs.parse(location.search.substr(1))
+} = qs.parse(location.search.substr(1));
 
 new Vue({
-  el: '.container',
+  el: ".container",
   data: {
-    searchList:null,
-    keyword:keyword,
-    isShow:false
+    pageNum: 1,
+    pageSize: 8,
+    loading: false,
+    allLoaded: false,
+    searchList: null,
+    keyword: keyword,
+    isShow: false
   },
   created() {
-    this.getSearchList()
+    this.getSearchList();
   },
   methods: {
     getSearchList() {
-      axios.post(url.searchList, {
-        keyword,
-        id,
-      }).then(res=>{
-        console.log(res)
-        this.searchList = res.data.lists
-      }).catch(res=>{
-        console.log('getSearchlist404')
-      })
+      if (this.allLoaded) {
+        return
+      }
+      this.loading=true
+      axios
+        .post(url.searchList, {
+          keyword,
+          id,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize
+        })
+        .then(res => {
+          let curLists = res.data.lists
+          console.log(curLists)
+          if (curLists.length < this.pageSize) {
+            this.allLoaded = true
+          }
+          if (this.searchList) {
+            this.searchList = this.searchList.concat(curLists)
+            this.pageNum++
+          } else {
+            this.searchList = curLists
+          }
+
+          this.loading = false
+        })
+        .catch(res => {
+          console.log("getSearchlist404");
+        });
     },
-    move(){  
-      if(document.documentElement.scrollTop || document.body.scrollTop > 100){
-        this.isShow = true
-      }else{
-        this.isShow = false
+    move() {
+      console.log(document.documentElement.scrollTop);
+      if (document.documentElement.scrollTop || document.body.scrollTop > 100) {
+        this.isShow = true;
+      } else {
+        this.isShow = false;
       }
     },
-    returnTop(){
-      console.log(1)
+    returnTop() {
+      let distance =
+        document.documentElement.scrollTop || document.body.scrollTop; //获得当前高度
+      let step = distance / 20; //每步的距离
+      (function jump() {
+        console.log(1);
+        if (distance > 0) {
+          distance -= step;
+          window.scrollTo(0, distance);
+          setTimeout(jump, 10);
+        }
+      })();
     }
   },
-  mixins:[mixin]
-})
+  mixins: [mixin]
+});

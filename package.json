@@ -10,7 +10,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "babel-plugin-component": "^1.1.1",
     "mint-ui": "^2.2.13",

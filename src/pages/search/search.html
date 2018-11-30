@@ -23,7 +23,9 @@
 </head>
 
 <body style="min-height: 667px;">
-  <div class="container with-top-search" style="min-height: 667px;" v-on:touchmove="move">
+  <div class="container with-top-search" style="min-height: 667px;" v-on:touchmove="move"     v-infinite-scroll="getSearchList"
+  infinite-scroll-disabled="loading"
+  infinite-scroll-distance="10">
       <div class="custom-search js-search-bar">
         <form>
           <input type="search" class="custom-search-input" autocomplete="off" name="keyword" :value="keyword"
@@ -73,6 +75,7 @@
         </div>
       </div>
       <div class="go-to-top" v-if="isShow" v-on:click="returnTop" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);"></div>
+      <div class="loading-more" v-show="loading"><span></span></div>
   </div>
 </body>
 

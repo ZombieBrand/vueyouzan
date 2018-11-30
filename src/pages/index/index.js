@@ -5,7 +5,9 @@ import Vue from 'vue'
 import axios from 'axios'
 import url from 'js/api.js'
 import mixin from 'js/mixin.js'
-import { InfiniteScroll } from 'mint-ui'
+import {
+  InfiniteScroll
+} from 'mint-ui'
 Vue.use(InfiniteScroll)
 
 new Vue({
@@ -16,7 +18,7 @@ new Vue({
     lists: null,
     loading: false,
     allLoaded: false,
-    bannerLists: null
+    bannerLists: null,
   },
   created() {
     this.getLists()
@@ -31,11 +33,12 @@ new Vue({
         pageSize: this.pageSize
       }).then(res => {
         let curLists = res.data.lists
-        if(curLists.length < this.pageSize) {
+        if (curLists.length < this.pageSize) {
           this.allLoaded = true
         }
         if (this.lists) {
           this.lists = this.lists.concat(curLists)
+          this.pageNum++
         } else {
           this.lists = curLists
         }
@@ -48,5 +51,5 @@ new Vue({
       })
     }
   },
-  mixins:[mixin]
+  mixins: [mixin]
 })
