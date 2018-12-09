@@ -479,7 +479,7 @@ only screen and (min-device-pixel-ratio: 1.5) {
   color: #333
 }
 
-.copyright .ft-links~.ft-copyright {
+.copyright .ft-links ~ .ft-copyright {
   -webkit-border-image: url("/v2/image/wap/border-line.png") 2 stretch;
   -moz-border-image: url("/v2/image/wap/border-line.png") 2 stretch;
   border-image: url("/v2/image/wap/border-line.png") 2 stretch;
@@ -489,7 +489,7 @@ only screen and (min-device-pixel-ratio: 1.5) {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
 only screen and (min--moz-device-pixel-ratio: 1.5),
 only screen and (min-device-pixel-ratio: 1.5) {
-  .copyright .ft-links~.ft-copyright {
+  .copyright .ft-links ~ .ft-copyright {
     border-top-width: 1px
   }
 }
@@ -918,47 +918,38 @@ only screen and (min-device-pixel-ratio: 1.5) {
     background-image: url("/v2/image/wap/guide_arrow@2x.png");
     background-size: 47px 44px
   }
-
   .follow-guide .step-2 {
     background-image: url("/v2/image/wap/step_2@2x.png");
     background-size: 260px 64px
   }
-
   .follow-guide .step-3 {
     background-image: url("/v2/image/wap/step_3@2x.png");
     background-size: 260px 68px
   }
-
   .fuck-taobao .step-1 {
     background-image: url("/v2/image/wap/step_1@2x.png");
     background-size: 260px 29px
   }
-
   .fuck-taobao .step-2 {
     background-image: url("/v2/image/wap/ftios_step_2@2x.png");
     background-size: 248px 86px
   }
-
   .fuck-taobao .step-and-2 {
     background-image: url("/v2/image/wap/ftand_step_2@2x.png");
     background-size: 260px 62px
   }
-
   .fav-guide .step-1 {
     background-image: url("/v2/image/wap/step_1@2x.png");
     background-size: 260px 29px
   }
-
   .fav-guide .step-2 {
     background-image: url("/v2/image/wap/fav_step_2@2x.png");
     background-size: 260px 86px
   }
-
   .share-guide .step-1 {
     background-image: url("/v2/image/wap/step_1@2x.png");
     background-size: 260px 29px
   }
-
   .share-guide .step-2 {
     background-image: url("/v2/image/wap/share_step_2@2x.png");
     background-size: 260px 86px
@@ -1011,11 +1002,9 @@ only screen and (min-device-pixel-ratio: 1.5) {
     background-position: -200px -7px;
     background-image: url("/v2/image/wap/right_icon/icons_sprite/icons_sprite@2x_29025c38a6.png")
   }
-
   a#global-cart.new .icon-img {
     background-position: -250px -7px
   }
-
   .no-text a#global-cart {
     background-image: url("/v2/image/wap/right_icon/icons_sprite/icons_sprite@2x_29025c38a6.png")
   }
@@ -1088,7 +1077,6 @@ only screen and (min-device-pixel-ratio: 1.5) {
     background-image: url("/v2/image/wap/right_icon/icons_sprite/icons_sprite@2x_29025c38a6.png");
     background-position: 3px -7px
   }
-
   .no-text a#global-wish {
     background-image: url("/v2/image/wap/right_icon/icons_sprite/icons_sprite@2x_29025c38a6.png")
   }
