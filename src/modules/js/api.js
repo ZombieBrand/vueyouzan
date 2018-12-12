@@ -9,7 +9,8 @@ let url = {
   cartLists:'/cart/list',
   cartReduce:'/cart/reduce',
   cartRemove:'/cart/remove',
-  cartMremove:'/cart/mrremove'
+  cartMremove:'/cart/mrremove',
+  details:'/goods/details'
 }
 
 //开发环境和真实环境的切换
