@@ -3,7 +3,11 @@ import Swipe from 'components/Swipe'
 let mixin={
     filters:{
         toFixed2(price){
-            return price.toFixed(2)
+            if(typeof price === Number){
+                return price.toFixed(2)
+            }else{
+                return price
+            }
         }
     },
     components: {

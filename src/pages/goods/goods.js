@@ -10,20 +10,37 @@ import axios from 'axios'
 import mixin from 'js/mixin'
 import qs from 'qs'
 let {id} = qs.parse(location.search.substr(1))
-console.log({id})
 new Vue({
     el:'#app',
     data:{
-        details:null
+        details:null,
+        detailTab:['商品详情','本店成交'],
+        tabIndex:0,
+        dealLists:null,
     },
     created(){
         this.getDetails()
     },
     methods:{
         getDetails(){
-            axios.get(url.details,{id}).then(res=>{
+            axios.post(url.details,{id}).then(res=>{
                this.details = res.data.data
                console.log(res)
+            }).catch(res=>{
+                console.log(404)
+            })
+        },
+        tabSwitch(index){
+            this.tabIndex=index
+            if(index){
+                this.getDeal()
+            }
+         
+        },
+        getDeal(){
+            axios.post(url.deal,{id}).then(res=>{
+                this.dealLists=res.data.data.lists
+                console.log(res)
             }).catch(res=>{
                 console.log(404)
             })
