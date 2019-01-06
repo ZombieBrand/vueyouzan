@@ -31,7 +31,7 @@
       <div class="content">
         <!-- <div class="js-image-swiper custom-image-swiper  custom-image-swiper-single" data-images="1">
          </div>  -->
-          <swipe :lists="bannerLists" name="swipe.vue" v-if="bannerLists"></swipe>
+        <swipe :lists="bannerLists" name="swipe.vue" v-if="bannerLists" style="width:375px;height:180px"></swipe>
         <!-- <a href="https://maijia.youzan.com/mars/notice/detail?id=" class="notice"></a> -->
         <div class="section-title">优店推荐</div>
         <div class="section-content shops">
@@ -62,27 +62,25 @@
             <span class="lineblock-font">最热商品推荐</span>
           </div>
         </div>
-          <div class="hot-goods js-waterfull-wrap" data-src="">
-            <ul class="js-list js-lazy" data-src="" 
-              v-infinite-scroll="getLists"
-              infinite-scroll-disabled="loading"
-              infinite-scroll-distance="10">
-              <li v-for="list in lists" :key="list.id">
-                <div class="goods-item">
-                  <a v-bind:href="'goods.html?id='+list.id">
-                    <div class="thumb img-box">
-                      <img class="fadeIn" v-bind:src="list.img">
-                    </div>
-                    <div class="detail">
-                      <div class="title">{{list.name}}</div>
-                      <div class="price">￥{{list.price}}</div>
-                    </div>
-                  </a>
-                </div>
-              </li>
-            </ul>
-            <div class="loading-more" v-show="loading"><span></span></div> 
-          </div>
+        <div class="hot-goods js-waterfull-wrap" data-src="">
+          <ul class="js-list js-lazy" data-src="" v-infinite-scroll="getLists" infinite-scroll-disabled="loading"
+            infinite-scroll-distance="10">
+            <li v-for="list in lists" :key="list.id">
+              <div class="goods-item">
+                <a v-bind:href="'goods.html?id='+list.id">
+                  <div class="thumb img-box">
+                    <img class="fadeIn" v-bind:src="list.img">
+                  </div>
+                  <div class="detail">
+                    <div class="title">{{list.name}}</div>
+                    <div class="price">￥{{list.price}}</div>
+                  </div>
+                </a>
+              </div>
+            </li>
+          </ul>
+          <div class="loading-more" v-show="loading"><span></span></div>
+        </div>
         <!-- <div class="js-show-find category-guid" style="display: none;"></div> -->
       </div>
     </div>

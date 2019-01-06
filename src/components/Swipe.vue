@@ -1,13 +1,15 @@
 <template>
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
-			<div class="swp-page swiper-slide" v-for="list in lists" v-bind:key="list.clickUrl">
+			<div class="swp-page swiper-slide" v-for="list in lists" v-bind:key="list.img">
 				<a class="js-no-follow" :href="list.clickUrl">
 					<img class="goods-main-photo fadeIn" :src="list.img">
-				</a>
+				</a> 
 			</div>
 		</div>
-		<div class="swiper-pagination"></div>
+		<div class="swiper-pagination">
+			<span></span>
+		</div>
 	</div>
 </template>
 
@@ -23,7 +25,9 @@
 				type: Array,
 				required: true
 			},
-			name: {}
+			name: {
+				type:String
+			}
 		},
 		created() {
 			// console.log('created: ',document.querySelectorAll('.swiper-slide'))
@@ -36,7 +40,9 @@
 			init() {
 				new Swiper('.swiper-container', {
 					loop: true,
-					pagination: '.swiper-pagination'
+					pagination:{
+						el:'.swiper-pagination'
+					}
 				});
 			}
 		}
@@ -57,4 +63,26 @@
 		width: 100%;
 		height: 100%;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>

@@ -675,7 +675,7 @@ only screen and (min-device-pixel-ratio:1.5) {
   margin-top: 10px;
   width: 16px;
   height: 16px;
-  background: url("https://b.yzcdn.cn/v2/image/loader.gif") no-repeat 50%;
+  background: url(https://b.yzcdn.cn/v2/image/loader@2x.gif) no-repeat 50%;
   background-size: 16px 16px
 }
 
