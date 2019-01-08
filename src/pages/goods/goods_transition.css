@@ -1,0 +1,22 @@
+.fade-enter-active, .fade-leave-active {
+  transform: translateY(0);
+  transition: all 500ms ease;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  transform: translateY(100%);
+  transition: all 500ms ease;
+}
+
+.cartMessage-enter-acitve, .cartMessage-leave-acitve {
+  transition: opacity 1s;
+}
+
+.cartMessage-enter, .cartMessage-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+.motify{
+  display: block;
+}

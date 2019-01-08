@@ -3,7 +3,7 @@
     <ul>
       <li v-on:click="changeNav(list,index)" v-bind:class="{active:index===curIndex}" v-for="(list,index) in navConfig" v-bind:key="list.icon"><a><i v-bind:class="list.icon"></i><div>{{list.name}}</div></a></li>
     </ul>
-  </div> 
+  </div>
 </template>
 
 <script>
