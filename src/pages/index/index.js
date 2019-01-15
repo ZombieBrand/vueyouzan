@@ -8,7 +8,7 @@ import mixin from 'js/mixin.js'
 import {
   InfiniteScroll
 } from 'mint-ui'
-Vue.use(InfiniteScroll)
+Vue.use(InfiniteScroll);
 
 new Vue({
   el: '.vue-el',
@@ -21,28 +21,28 @@ new Vue({
     bannerLists: null,
   },
   created() {
-    this.getLists()
+    this.getLists();
     this.getBanner()
   },
   methods: {
     getLists() {
-      if (this.allLoaded) return
-      this.loading = true
+      if (this.allLoaded) return;
+      this.loading = true;
       axios.get(url.hotLists, {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }).then(res => {
-        let curLists = res.data.lists
+        let curLists = res.data.lists;
         if (curLists.length < this.pageSize) {
           this.allLoaded = true
         }
         if (this.lists) {
-          this.lists = this.lists.concat(curLists)
+          this.lists = this.lists.concat(curLists);
           this.pageNum++
         } else {
           this.lists = curLists
         }
-        this.loading = false
+        this.loading = false;
         this.pageNum++
       })
     },
@@ -53,4 +53,4 @@ new Vue({
     }
   },
   mixins: [mixin]
-})
+});
