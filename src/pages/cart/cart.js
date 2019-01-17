@@ -10,7 +10,7 @@ new Vue({
   el: '.container',
   data: {
     lists: null,
-    total:0
+    total: 0,
   },
   computed: {
     allSelected: {
@@ -32,20 +32,27 @@ new Vue({
         })
       }
     },
-    selectLists(){
-      if(this.lists&&this.lists.length){
-        this.lists.forEach(shop=>{
-          shop.goodsList.forEach(good=>{
-            if(good.checked){
-
+    selectLists() {
+      if (this.lists && this.lists.length) {
+        let arr = [];
+        let total = 0;
+        this.lists.forEach(shop => {
+          shop.goodsList.forEach(good => {
+            if (good.checked) {
+              arr.push(good);
+              total += good.price * good.number
             }
           })
-        })
+        });
+        this.total = total;
+        return arr
+      }else{
+        return []
       }
     }
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
@@ -84,7 +91,12 @@ new Vue({
     },
     selectAll() {
       this.allSelected = !this.allSelected
-    }
+    },
+    changeSkuNum(good,goodIndex,num) {
+      //判断选购数量
+      if (num < 0 && good.number === 1) return;
+      good.number += num
+    },
   },
   mixins: [mixin]
 });

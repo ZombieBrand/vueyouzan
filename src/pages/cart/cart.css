@@ -644,7 +644,7 @@ only screen and (min-device-pixel-ratio: 1.5) {
   font-size: 12px;
   position: absolute;
   right: 0;
-  bottom: 0
+  bottom:-5px;
 }
 
 .block-list-cart .block-item-cart .name-card .num .quantity .response-area {

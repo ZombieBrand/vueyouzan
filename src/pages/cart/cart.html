@@ -62,15 +62,15 @@
                         <div class="num">
                           <!---->
                           <div class="quantity">
-                            <button class="minus disabled" type="button"></button>
-                            <input class="txt" pattern="[0-9]*" type="text" value="1">
+                            <button class="minus" type="button" :class="{disabled:good.number ===1}"></button>
+                            <input class="txt" pattern="[0-9]*" type="text" :value="good.number">
                             <button class="plus " type="button"></button>
-                            <div class="response-area response-area-minus"></div>
-                            <div class="response-area response-area-plus"></div>
+                            <div class="response-area response-area-minus" @click.stop="changeSkuNum(good,goodIndex,-1)"></div>
+                            <div class="response-area response-area-plus" @click.stop="changeSkuNum(good,goodIndex,1)"></div>
                           </div>
                         </div>
                         <div class="price c-orange">
-                          ¥<span>189.00 </span></div>
+                          ¥<span>{{good.price | toFixed2}}</span></div>
                       </div>
                       <div class="error-box"></div>
                     </div>
@@ -133,15 +133,15 @@
             </div>
             <!-- 显示状态 -->
             <div class="total-price">
-              合计：¥<span class="js-total-price" style="color: rgb(255, 102, 0);">684.99</span>
+              合计：¥<span class="js-total-price" style="color: rgb(255, 102, 0);">{{total|toFixed2}}</span>
               <p class="c-gray-dark">不含运费</p>
             </div>
-            <button class="js-go-pay btn btn-orange-dark font-size-14" href="javascript:;" disabled>
+            <button class="js-go-pay btn btn-orange-dark font-size-14" href="javascript:;" :disabled="!selectLists.length">
               结算 (3)
             </button>
             <!-- 编辑状态 -->
-            <button class="j-delete-goods btn font-size-14 btn-red" disabled href="javascript:;">删除
-            </button>
+            <!--<button class="j-delete-goods btn font-size-14 btn-red" :disabled="!selectLists.length" href="javascript:;">删除-->
+            <!--</button>-->
           </div>
         </div>
       </div>

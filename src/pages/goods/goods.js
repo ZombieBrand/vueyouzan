@@ -29,9 +29,9 @@ new Vue({
     skuType: null,
     showSku: false,
     skuNum: 1,
-    isAddCart:false,
-    id:null,
-    showAddMessage:false,
+    isAddCart: false,
+    id: null,
+    showAddMessage: false,
   },
   created() {
     this.getDetails()
@@ -89,12 +89,12 @@ new Vue({
       // 加入购物车处理
       axios.post(url.addCart, {id: '', number: this.skuNum}).then(res => {
         if (res.data.status === 200) {
-          this.showSku = false
-          this.isAddCart = true
-          this.showAddMessage = true
-          setTimeout(()=>{
+          this.showSku = false;
+          this.isAddCart = true;
+          this.showAddMessage = true;
+          setTimeout(() => {
             this.showAddMessage = false
-          },2000)
+          }, 2000)
         }
       })
     }
