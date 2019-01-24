@@ -17,6 +17,7 @@ let {
 let cancelScroll = function (event) {
   event.preventDefault()
 };
+console.log(id);
 new Vue({
   el: '#app',
   data: {
@@ -32,9 +33,11 @@ new Vue({
     isAddCart: false,
     id: null,
     showAddMessage: false,
+    userCart: null
   },
   created() {
-    this.getDetails()
+    this.getDetails();
+    this.isUserCart();
   },
   mounted() {
 
@@ -69,12 +72,13 @@ new Vue({
       axios.post(url.deal, {
         id
       }).then(res => {
+        console.log(1,res)
         this.dealLists = res.data.data.lists;
         this.loading = false;
-        console.log(res)
+        console.log({res})
       }).catch(res => {
         console.log(404)
-      })
+      });
     },
     chooseSku(type) {
       this.skuType = type;
@@ -87,17 +91,32 @@ new Vue({
     },
     addCart() {
       // 加入购物车处理
-      axios.post(url.addCart, {id: '', number: this.skuNum}).then(res => {
+      axios.post(url.addCart, {id, number: this.skuNum}).then(res => {
         if (res.data.status === 200) {
           this.showSku = false;
           this.isAddCart = true;
           this.showAddMessage = true;
+          /*获取本地缓存将用户购商品加入购物车*/
+          let userCart = {id, number: this.skuNum, details: this.details};
+          let usedCart = JSON.parse(localStorage.getItem('userCart')) || [];
+          if (usedCart) {
+            usedCart.push(userCart);
+            localStorage.setItem('userCart', JSON.stringify(usedCart));
+            this.userCart = localStorage.getItem('userCart');
+          } else {
+            localStorage.setItem('userCart', JSON.stringify(userCart));
+            this.userCart = localStorage.getItem('userCart');
+          }
+         /*end*/
           setTimeout(() => {
-            this.showAddMessage = false
+            this.showAddMessage = false;
           }, 2000)
         }
       })
-    }
+    },
+    isUserCart() {
+      localStorage.getItem('userCart') ? this.isAddCart = true : this.isAddCart = false
+    },
   },
   watch: {
     // 监视蒙版出现触发禁止滑动事件
