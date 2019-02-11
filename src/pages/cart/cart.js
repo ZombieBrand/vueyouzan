@@ -63,6 +63,8 @@ new Vue({
         let lists = res.data.cartList;
         lists.forEach(shop => {
           shop.checked = true;
+          shop.editing = false;
+          shop.editingMsg = '编辑'
           shop.goodsList.forEach(good => {
             good.checked = true
           })
@@ -94,6 +96,17 @@ new Vue({
     },
     selectAll() {
       this.allSelected = !this.allSelected
+    },
+    edit(shop,shopIndex){
+      console.log('编辑')
+       shop.editing = !shop.editing
+       shop.editingMsg = this.editing ? '完成':'编辑'
+       this.lists.forEach((item,index) =>{
+        if(shopIndex !== index){
+          item.editing = false
+          item.editingMsg = this.editing?'完成':'编辑'
+        }
+       })
     },
     changeSkuNum(good, goodIndex, num) {
       //判断选购数量

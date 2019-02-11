@@ -33,8 +33,10 @@
               </div>
               <a class="shop-title">
                 <i class="custom-store-img">店铺：</i>{{shop.shopTitle}}</a>
-              <a class="j-edit-list pull-right c-blue font-size-12 edit-list" data-type="cart" href="javascript:">
-                编辑
+                <a class="j-edit-list pull-right c-blue font-size-12 edit-list" data-type="cart" href="javascript:"
+                @click="edit(shop,shopIndex)"
+                >
+                  {{shop.editingMsg}}
               </a>
             </div>
             <div>
