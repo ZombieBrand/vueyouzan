@@ -12,7 +12,9 @@ new Vue({
   data: {
     lists: null,
     total: 0,
-    userCart: null
+    userCart: null,
+    editingShop: null,
+    editingShopIndex: -1
   },
   computed: {
     allSelected: {
@@ -34,6 +36,22 @@ new Vue({
         })
       }
     },
+    allRemoveSelected: {
+      get() {
+        if (this.editingShop) {
+          return this.editingShop.removeChecked
+        }
+        return false
+      },
+      set(newVal) {
+        if (this.editingShop) {
+          this.editingShop.removeChecked = newVal;
+          this.editingShop.goodsList.forEach(good => {
+            good.removeChecked = newVal
+          })
+        }
+      }
+    },
     selectLists() {
       if (this.lists && this.lists.length) {
         let arr = [];
@@ -51,6 +69,18 @@ new Vue({
       } else {
         return []
       }
+    },
+    removeLists() {
+      if (this.editingShop) {
+        let arr = [];
+        this.editingShop.goodsList.forEach(good => {
+          if (good.removeChecked) {
+            arr.push(good)
+          }
+        });
+        return arr
+      }
+      return []
     }
   },
   created() {
@@ -64,9 +94,11 @@ new Vue({
         lists.forEach(shop => {
           shop.checked = true;
           shop.editing = false;
-          shop.editingMsg = '编辑'
+          shop.removeChecked = false;
+          shop.editingMsg = '编辑';
           shop.goodsList.forEach(good => {
-            good.checked = true
+            good.checked = true;
+            good.removeChecked = false;
           })
         });
         this.lists = lists
@@ -74,39 +106,35 @@ new Vue({
     },
     selectGood(shop, good) {
       // window.location.href = `goods.html?id=${shop.shopId}`
-      console.log(good.checked);
-      good.checked = !good.checked;
-      shop.checked = shop.goodsList.every(good => {
-        return good.checked
+      console.log(good.checked, '1');
+      let attr = this.editingShop ? 'removeChecked' : 'checked';
+      good[attr] = !good[attr];
+      shop[attr] = shop.goodsList.every(good => {
+        return good[attr]
       })
     },
-    selectShop(shop, shopIndex) {
-      let editShop = this.lists[shopIndex];
-      if (editShop.checked) {
-        editShop.checked = false;
-        editShop.goodsList.forEach(good => {
-          good.checked = false
-        })
-      } else {
-        editShop.checked = true;
-        editShop.goodsList.forEach(good => {
-          good.checked = true
-        })
-      }
+    selectShop(shop) {
+      let attr = this.editingShop ? 'removeChecked' : 'checked';
+      shop[attr] = !shop[attr];
+      shop.goodsList.forEach(good => {
+        good[attr] = shop[attr]
+      })
     },
     selectAll() {
-      this.allSelected = !this.allSelected
+      let attr = this.editingShop ? 'allRemoveSelected' : 'allSelected'
+      this[attr] = !this[attr]
     },
-    edit(shop,shopIndex){
-      console.log('编辑')
-       shop.editing = !shop.editing
-       shop.editingMsg = this.editing ? '完成':'编辑'
-       this.lists.forEach((item,index) =>{
-        if(shopIndex !== index){
-          item.editing = false
-          item.editingMsg = this.editing?'完成':'编辑'
+    edit(shop, shopIndex) {
+      shop.editing = !shop.editing;
+      shop.editingMsg = shop.editing ? '完成' : '编辑';
+      this.lists.forEach((item, index) => {
+        if (shopIndex !== index) {
+          item.editing = false;
+          item.editingMsg = shop.editing ? '' : '编辑'
         }
-       })
+      });
+      this.editingShop = shop.editing ? shop : null;
+      this.editingShopIndex = shop.editing ? shopIndex : -1;
     },
     changeSkuNum(good, goodIndex, num) {
       //判断选购数量
@@ -114,16 +142,16 @@ new Vue({
       good.number += num
     },
     getUsedCart() {
-      let usedCart = JSON.parse(localStorage.getItem('userCart')) || [];
-      for (let i = 0; i < usedCart.length; i++) {
-        for (let j = i + 1; j < usedCart.length; j++) {
-          if (usedCart[i].id === usedCart[j].id) {
-            usedCart[i].number += usedCart[j].number;
-            usedCart.splice(j, 1);
-            j = j - 1;  // 关键，因为splice()删除元素之后，会使得数组长度减小，此时如果没有j=j-1的话，会导致相同id项在重复两次以上之后无法进行去重，且会错误删除id没有重复的项。
-          }
-        }
-      }
+      // let usedCart = JSON.parse(localStorage.getItem('userCart')) || [];
+      // for (let i = 0; i < usedCart.length; i++) {
+      //   for (let j = i + 1; j < usedCart.length; j++) {
+      //     if (usedCart[i].id === usedCart[j].id) {
+      //       usedCart[i].number += usedCart[j].number;
+      //       usedCart.splice(j, 1);
+      //       j = j - 1;  // 关键，因为splice()删除元素之后，会使得数组长度减小，此时如果没有j=j-1的话，会导致相同id项在重复两次以上之后无法进行去重，且会错误删除id没有重复的项。
+      //     }
+      //   }
+      // }
       // if (usedCart) {
       //   usedCart.push(userCart);
       //   this.userCart = usedCart;

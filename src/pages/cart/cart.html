@@ -28,26 +28,35 @@
         <div class="js-shop-list shop-list">
           <div class="block block-order block-cart" v-for="(shop,shopIndex) in lists">
             <div class="header">
-              <div class="select-group js-select-group" @click.stop="selectShop(shop,shopIndex)">
-                <span class="check" :class="{checked:shop.checked}"></span>
+              <div @click.stop="selectShop(shop,shopIndex)" class="select-group js-select-group">
+                <span :class="{checked:shop.checked}" class="check" v-show="!editingShop"></span>
+                <span :class="{checked:shop.removeChecked}" class="check" v-show="editingShop"></span>
+
               </div>
               <a class="shop-title">
                 <i class="custom-store-img">店铺：</i>{{shop.shopTitle}}</a>
-                <a class="j-edit-list pull-right c-blue font-size-12 edit-list" data-type="cart" href="javascript:"
-                @click="edit(shop,shopIndex)"
-                >
-                  {{shop.editingMsg}}
+              <a @click="edit(shop,shopIndex)" class="j-edit-list pull-right c-blue font-size-12 edit-list"
+                 data-type="cart"
+                 href="javascript:"
+              >
+                {{shop.editingMsg}}
               </a>
             </div>
             <div>
               <ul class="js-list block block-list block-list-cart border-0">
-                <li @click.stop="selectGood(shop,good)" class="block-item block-item-cart"
-                    v-for="(good,goodIndex) in shop.goodsList">
+                <li :class="{editing:shop.editing}" :key="good.id"
+                    @click.stop="selectGood(shop,good)"
+                    class="block-item block-item-cart"
+                    v-for="(good,goodIndex) in shop.goodsList"
+                >
                   <div>
-                    <div class="check-container"><span class="check" :class="{checked:good.checked}"></span></div>
+                    <div class="check-container">
+                      <span :class="{checked:good.checked}" class="check" v-show="!editingShop"></span>
+                      <span :class="{checked:good.removeChecked}" class="check" v-show="editingShop"></span>
+                    </div>
                     <div class="name-card clearfix">
                       <a class="thumb js-goods-link">
-                        <img :src="good.img" class="js-lazy">
+                        <img :data-src="good.img" :src="good.img" class="js-lazy">
                       </a>
                       <div class="detail"><a class="js-goods-link">
                         <h3 class="title js-ellipsis"><i>{{good.title}}</i></h3>
@@ -56,19 +65,21 @@
                           {{good.sku}}
                         </p>
                         <!-- 显示状态 -->
-                        <div class="num" style="display: none;">
+                        <div class="num" v-show="!shop.editing">
                           ×<span class="num-txt">{{good.number}}</span>
                           <!---->
                         </div>
                         <!-- 编辑状态 -->
-                        <div class="num">
+                        <div class="num" v-show="shop.editing">
                           <!---->
                           <div class="quantity">
-                            <button class="minus" type="button" :class="{disabled:good.number ===1}"></button>
-                            <input class="txt" pattern="[0-9]*" type="text" :value="good.number">
+                            <button :class="{disabled:good.number ===1}" class="minus" type="button"></button>
+                            <input class="txt" pattern="[0-9]*" type="text" v-model="good.number">
                             <button class="plus " type="button"></button>
-                            <div class="response-area response-area-minus" @click.stop="changeSkuNum(good,goodIndex,-1)"></div>
-                            <div class="response-area response-area-plus" @click.stop="changeSkuNum(good,goodIndex,1)"></div>
+                            <div @click.stop="changeSkuNum(good,goodIndex,-1)"
+                                 class="response-area response-area-minus"></div>
+                            <div @click.stop="changeSkuNum(good,goodIndex,1)"
+                                 class="response-area response-area-plus"></div>
                           </div>
                         </div>
                         <div class="price c-orange">
@@ -131,19 +142,26 @@
             你需要分开结算每个店铺的商品哦~
           </div>
           <div class="bottom-cart clear-fix">
-            <div class="select-all" @click="selectAll()"><span class="check" :class="{checked:allSelected}"></span> 全选
+            <div @click="selectAll()" class="select-all">
+              <span class="check" v-show="!editingShop" :class="{checked:allSelected}"></span>
+              <span class="check" v-show="editingShop" :class="{checked:allRemoveSelected}"></span> 全选
             </div>
             <!-- 显示状态 -->
             <div class="total-price">
               合计：¥<span class="js-total-price" style="color: rgb(255, 102, 0);">{{total|toFixed2}}</span>
               <p class="c-gray-dark">不含运费</p>
             </div>
-            <button class="js-go-pay btn btn-orange-dark font-size-14" href="javascript:;" :disabled="!selectLists.length">
+            <button :disabled="!selectLists.length" class="js-go-pay btn btn-orange-dark font-size-14"
+                    href="javascript:;"
+                    v-show="!editingShop"
+            >
               结算 (3)
             </button>
             <!-- 编辑状态 -->
-            <!--<button class="j-delete-goods btn font-size-14 btn-red" :disabled="!selectLists.length" href="javascript:;">删除-->
-            <!--</button>-->
+            <button class="j-delete-goods btn font-size-14 btn-red" disabled="disabled" href="javascript:;"
+                    v-show="editingShop"
+            >删除
+            </button>
           </div>
         </div>
       </div>
