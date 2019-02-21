@@ -201,9 +201,10 @@ new Vue({
     move(e, shopIndex, good, goodIndex) {
       let moveX = e.changedTouches[0].clientX;
       // console.log({moveX})
-      let traction = '-120px';
-      if (good.startX - moveX > 100 && good.startX - moveX < 105) {
+      let traction = '0';
+      if (good.startX - moveX > 20 && good.startX - moveX < 60) {
         console.log('move', good.startX - moveX);
+        //TODO:滑动拉伸效果未完成
         Velocity(this.$refs[`goods-${shopIndex}-${goodIndex}`], {
           left: traction
         })
