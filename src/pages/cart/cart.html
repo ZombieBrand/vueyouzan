@@ -45,12 +45,15 @@
             <div>
               <ul class="js-list block block-list block-list-cart border-0">
                 <li :class="{editing:shop.editing}" :key="good.id"
-                    @click.stop="selectGood(shop,good)"
+                    :ref="'goods-'+shopIndex+'-'+goodIndex"
+                    @touchend="end($event,shopIndex,good,goodIndex)"
+                    @touchmove="move($event,shopIndex,good,goodIndex)"
+                    @touchstart="start($event,good)"
                     class="block-item block-item-cart"
                     v-for="(good,goodIndex) in shop.goodsList"
                 >
                   <div>
-                    <div class="check-container">
+                    <div @click.stop="selectGood(shop,good)" class="check-container">
                       <span :class="{checked:good.checked}" class="check" v-show="!editingShop"></span>
                       <span :class="{checked:good.removeChecked}" class="check" v-show="editingShop"></span>
                     </div>
@@ -76,9 +79,9 @@
                             <button :class="{disabled:good.number ===1}" class="minus" type="button"></button>
                             <input class="txt" pattern="[0-9]*" type="text" v-model="good.number">
                             <button class="plus " type="button"></button>
-                            <div @click.stop="changeSkuNum(good,goodIndex,-1)"
+                            <div @click.stop="reduce(good)"
                                  class="response-area response-area-minus"></div>
-                            <div @click.stop="changeSkuNum(good,goodIndex,1)"
+                            <div @click.stop="add(good)"
                                  class="response-area response-area-plus"></div>
                           </div>
                         </div>
@@ -87,7 +90,7 @@
                       </div>
                       <div class="error-box"></div>
                     </div>
-                    <div class="delete-btn"><span>删除</span></div>
+                    <div @click="remove(shop,shopIndex,good,goodIndex)" class="delete-btn"><span>删除</span></div>
                   </div>
                 </li>
               </ul>
@@ -143,22 +146,23 @@
           </div>
           <div class="bottom-cart clear-fix">
             <div @click="selectAll()" class="select-all">
-              <span class="check" v-show="!editingShop" :class="{checked:allSelected}"></span>
-              <span class="check" v-show="editingShop" :class="{checked:allRemoveSelected}"></span> 全选
+              <span :class="{checked:allSelected}" class="check" v-show="!editingShop"></span>
+              <span :class="{checked:allRemoveSelected}" class="check" v-show="editingShop"></span> 全选
             </div>
             <!-- 显示状态 -->
-            <div class="total-price">
+            <div class="total-price" v-show="!editingShop">
               合计：¥<span class="js-total-price" style="color: rgb(255, 102, 0);">{{total|toFixed2}}</span>
               <p class="c-gray-dark">不含运费</p>
             </div>
             <button :disabled="!selectLists.length" class="js-go-pay btn btn-orange-dark font-size-14"
                     href="javascript:;"
-                    v-show="!editingShop"
             >
               结算 (3)
             </button>
             <!-- 编辑状态 -->
-            <button class="j-delete-goods btn font-size-14 btn-red" disabled="disabled" href="javascript:;"
+            <button :disabled="!removeLists.length" @click="removeShops()"
+                    class="j-delete-goods btn font-size-14 btn-red"
+                    href="javascript:;"
                     v-show="editingShop"
             >删除
             </button>

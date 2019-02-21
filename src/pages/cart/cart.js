@@ -5,7 +5,7 @@ import Vue from 'vue'
 import mixin from 'js/mixin.js'
 import axios from 'axios'
 import url from 'js/api.js'
-
+import Velocity from 'velocity-animate'
 
 new Vue({
   el: '.container',
@@ -14,7 +14,8 @@ new Vue({
     total: 0,
     userCart: null,
     editingShop: null,
-    editingShopIndex: -1
+    editingShopIndex: -1,
+    removeData: null
   },
   computed: {
     allSelected: {
@@ -54,31 +55,31 @@ new Vue({
     },
     selectLists() {
       if (this.lists && this.lists.length) {
-        let arr = [];
+        let ids = [];
         let total = 0;
         this.lists.forEach(shop => {
           shop.goodsList.forEach(good => {
             if (good.checked) {
-              arr.push(good);
+              ids.push(good);
               total += good.price * good.number
             }
           })
         });
         this.total = total;
-        return arr
+        return ids
       } else {
         return []
       }
     },
     removeLists() {
       if (this.editingShop) {
-        let arr = [];
+        let ids = [];
         this.editingShop.goodsList.forEach(good => {
           if (good.removeChecked) {
-            arr.push(good)
+            ids.push(good)
           }
         });
-        return arr
+        return ids
       }
       return []
     }
@@ -121,7 +122,7 @@ new Vue({
       })
     },
     selectAll() {
-      let attr = this.editingShop ? 'allRemoveSelected' : 'allSelected'
+      let attr = this.editingShop ? 'allRemoveSelected' : 'allSelected';
       this[attr] = !this[attr]
     },
     edit(shop, shopIndex) {
@@ -136,22 +137,104 @@ new Vue({
       this.editingShop = shop.editing ? shop : null;
       this.editingShopIndex = shop.editing ? shopIndex : -1;
     },
-    changeSkuNum(good, goodIndex, num) {
-      //判断选购数量
-      if (num < 0 && good.number === 1) return;
-      good.number += num
+    reduce(good) {
+      if (good.number === 1) return;
+      axios.post(url.cartAdd, {id: good.id, number: 1}).then(res => {
+        good.number--
+      })
+    },
+    add(good) {
+      axios.post(url.cartAdd, {id: good.id, number: 1}).then(res => {
+        good.number++
+      })
+    },
+    remove(shop, shopIndex, good, goodIndex) {
+      this.removeData = {shop, shopIndex, good, goodIndex};
+      axios.post(url.cartRemove, {
+        id: good.id
+      }).then(res => {
+        shop.goodsList.splice(goodIndex, 1);
+        if (shop.goodsList.length === 0) {
+          this.lists.splice(shopIndex, 1);
+          this.editingShop = null;
+          this.editingShopIndex = -1;
+          this.lists.forEach(item => {
+            item.editing = false;
+            item.editingMsg = '编辑'
+          })
+        }
+      })
+    },
+    removeShops() {
+      // let {shop, shopIndex, good, goodIndex} = this.removeData;
+      let ids = [];
+      this.removeLists.forEach((item) => {
+        ids.push(item.id)
+      });
+      axios.post(url.cartMremove, {ids}).then(res => {
+        let arr = [];
+        this.editingShop.goodsList.forEach((good) => {
+          let index = this.removeLists.findIndex(item => {
+            return item.id === good.id;
+          });
+          if (index === -1) {
+            arr.push(good)
+          }
+        });
+        if (arr.length) {
+          this.editingShop.goodsList = arr
+        } else {
+          this.lists.splice(this.editingShopIndex, 1);
+          this.editingShop = null;
+          this.editingShopIndex = -1;
+          this.lists.forEach(item => {
+            item.editing = false;
+            item.editingMsg = '编辑'
+          })
+        }
+      });
+    },
+    start(e, good) {
+      good.startX = e.changedTouches[0].clientX;
+      console.log(good.startX, 'start')
+    },
+    move(e, shopIndex, good, goodIndex) {
+      let moveX = e.changedTouches[0].clientX;
+      // console.log({moveX})
+      let traction = '-120px';
+      if (good.startX - moveX > 100 && good.startX - moveX < 105) {
+        console.log('move', good.startX - moveX);
+        Velocity(this.$refs[`goods-${shopIndex}-${goodIndex}`], {
+          left: traction
+        })
+      }
+    },
+    end(e, shopIndex, good, goodIndex) {
+      let endX = e.changedTouches[0].clientX;
+      let left = '0';
+      if (good.startX - endX > 100) {
+        left = '-60px'
+      }
+      if (endX - good.startX > 100) {
+        left = '0px'
+      }
+      console.log(endX, good.startX);
+      Velocity(this.$refs[`goods-${shopIndex}-${goodIndex}`], {
+        left: left
+      })
     },
     getUsedCart() {
-      // let usedCart = JSON.parse(localStorage.getItem('userCart')) || [];
-      // for (let i = 0; i < usedCart.length; i++) {
-      //   for (let j = i + 1; j < usedCart.length; j++) {
-      //     if (usedCart[i].id === usedCart[j].id) {
-      //       usedCart[i].number += usedCart[j].number;
-      //       usedCart.splice(j, 1);
-      //       j = j - 1;  // 关键，因为splice()删除元素之后，会使得数组长度减小，此时如果没有j=j-1的话，会导致相同id项在重复两次以上之后无法进行去重，且会错误删除id没有重复的项。
-      //     }
-      //   }
-      // }
+      //获取本地缓存中用户购物车信息并且商品去重
+      let usedCart = JSON.parse(localStorage.getItem('userCart')) || [];
+      for (let i = 0; i < usedCart.length; i++) {
+        for (let j = i + 1; j < usedCart.length; j++) {
+          if (usedCart[i].id === usedCart[j].id) {
+            usedCart[i].number += usedCart[j].number;
+            usedCart.splice(j, 1);
+            j = j - 1; // 关键，因为splice()删除元素之后，会使得数组长度减小，此时如果没有j=j-1的话，会导致相同id项在重复两次以上之后无法进行去重，且会错误删除id没有重复的项。
+          }
+        }
+      }
       // if (usedCart) {
       //   usedCart.push(userCart);
       //   this.userCart = usedCart;
