@@ -149,11 +149,13 @@
 @import "./member.css";
 @import "./member_base.css";
 
+
 </style>
 <style>
 body {
   margin: 0;
 }
+
 
 </style>
 
