@@ -15,7 +15,7 @@ let url = {
   addCart: '/cart/add',
   addressLists:'/address/list',
   addressAdd:'/address/add',
-  adressRemove:'/address/remove',
+  addressRemove:'/address/remove',
   addressUpdate:'/address/update',
   addressSetDefault:'/address/setDefault'
 };
