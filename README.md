@@ -22,3 +22,5 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 
 qs是?a=b提取
+
+# 由于github无法请求http协议网站所以mock数据无法获取,下载本地`npm run dev `查看
