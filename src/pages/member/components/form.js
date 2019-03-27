@@ -1,4 +1,3 @@
-import Address from 'js/addressService.js'
 
 export default {
   data() {
