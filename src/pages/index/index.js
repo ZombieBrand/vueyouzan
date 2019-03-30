@@ -27,19 +27,23 @@ new Vue({
   methods: {
     getLists() {
       if (this.allLoaded) return;
+      // 节流
       this.loading = true;
       axios.get(url.hotLists, {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }).then(res => {
         let curLists = res.data.lists;
+        // 判断所有数据是否加载完毕
         if (curLists.length < this.pageSize) {
           this.allLoaded = true
         }
         if (this.lists) {
+          // 非第一次将下次于上一次合并
           this.lists = this.lists.concat(curLists);
           this.pageNum++
         } else {
+          // 第一次请求数据
           this.lists = curLists
         }
         this.loading = false;
